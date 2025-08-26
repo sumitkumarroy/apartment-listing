@@ -1,0 +1,89 @@
+<%layout("../layouts/boilerplate.ejs")%>
+<body>
+  <h4>Edit the listing</h4>
+  <form
+    action="/listing/edit/<%=listing._id%>?_method=put"
+    method="post"
+    novalidate
+    class="needs-validation"
+  >
+    <div class="mb-3">
+      <label for="title" class="form-label">Title: </label>
+      <input
+        type="text"
+        class="form-control"
+        name="listing[title]"
+        value="<%=listing.title%>"
+        required
+      />
+      <div class="valid-feedback">Looks good!</div>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description:</label>
+      <textarea name="listing[description]" class="form-control" required>
+<%=listing.description%>
+
+      </textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="filename" class="form-label">Filename: </label>
+      <input
+        type="text"
+        name="listing[image][filename]"
+        class="form-control"
+        value="<%=listing.image.filename%>"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="url" class="form-label">URL: </label>
+      <input
+        type="text"
+        name="listing[image][url]"
+        class="form-control"
+        value="<%=listing.image.url%>"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="Price" class="form-label">Price: </label>
+      <input
+        type="number"
+        name="listing[price]"
+        class="form-control"
+        min="0"
+        value="<%=listing.price%>"
+        required
+      />
+    </div>
+    <div class="row">
+      <div class="mb-3 col-md-6">
+        <label for="Location" class="form-label">Location: </label>
+        <input
+          type="text"
+          name="listing[location]"
+          class="form-control"
+          value="<%=listing.location%>"
+          required
+        />
+      </div>
+
+      <div class="mb-3 col-md-6">
+        <label for="Country" class="form-label">Country: </label>
+        <input
+          type="text"
+          name="listing[country]"
+          class="form-control"
+          value="<%=listing.country%>"
+          required
+        />
+      </div>
+    </div>
+
+    <button class="btn btn-warning">Update</button>
+  </form>
+</body>
+<script src="/js/form-validation.js"></script>

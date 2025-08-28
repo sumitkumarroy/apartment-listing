@@ -1,6 +1,7 @@
 const express = require("express")
 const mongoose = require("mongoose")
 const Listing = require("./models/listing")
+const Review = require("./models/reviewSchema.js")
 const ejsMate = require("ejs-mate")
 const wrapAsync = require("./errors/wrapAsync.js")
 const extendError = require("./errors/extendError")
@@ -50,6 +51,7 @@ app.get('/listings/:id', wrapAsync( async (req,res)=>{
     if(!listing){
         throw new extendError(400,"Invalid Listing Id")
     }
+    listing = await listing.populate('review')
     res.render('show.ejs',{listing})
 }))
 
@@ -101,9 +103,27 @@ app.post('/listings/undo', wrapAsync(async (req,res)=>{
     res.redirect('/listings')
 }))
 
+//add review
+app.post('/listing-review', wrapAsync(async(req,res)=>{
+    const {listingId} = req.body;
+    console.log(listingId)
+    res.render("review.ejs",{listingId})
+}))
+
+app.post('/listing-reviews/submit', wrapAsync(async(req,res)=>{
+    
+    const listing = await Listing.findById(req.body.listingId)
+    const{review,rating}  = req.body.review
+    const new_review = new Review({review,rating})
+    listing.review.push(new_review)
+    new_review.save()
+    listing.save()
+    res.redirect('/listings')
+}))
 app.all("/{*splat}", (req, res, next) => {
   next(new extendError(404, "page not found"));
 });
+
 app.use((err,req,res,next)=>{
     let {statuscode = 500, message = "Something went wrong" } = err;
     res.status(statuscode).send(message);

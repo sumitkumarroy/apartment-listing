@@ -21,17 +21,33 @@
         </p>
       </div>
     </div>
-    <div class="row mt-2">
-      <div class="col-6 text-end">
+    <h3>Reviews</h3>
+    <div class="reviewContainer">
+      <% for(const rating of listing.review){%>
+      <div class="reviewDiv">
+        <%=rating.rating%> | <%=rating.review%>
+        <p><strong>At: </strong><%=rating.time.toDateString()%></p>
+      </div>
+      <hr />
+      <%}%>
+    </div>
+    <div class="row mt-2 show-btns">
+      <div class="">
         <form action="/edit" method="post">
           <input type="hidden" name="id" value="<%=listing._id%>" />
           <button class="btn btn-warning" type="submit">Edit your post</button>
         </form>
       </div>
-      <div class="col-6 text-start">
+      <div class="">
         <form action="/listing/<%=listing._id%>?_method=delete" method="post">
           <button class="btn btn-danger" type="submit">Delete</button>
         </form>
+        <div class="">
+          <form action="/listing-review" method="post">
+            <input type="hidden" name="listingId" value="<%=listing._id%>" />
+            <button class="btn btn-success" type="submit">Submit Review</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
